@@ -12,7 +12,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 export class AppComponent implements OnInit{
    private http = inject(HttpClient);
   listados = signal<any[]>([]);
-  apiUrl: string = 'http://localhost/Prueba1/wp-json/miapi/v1/listados';  
+  apiUrl: string = 'http://localhost/public_html/wp-json/miapi/v1/listados';  
   ngOnInit() {
     if (this.apiUrl) {
       this.http.get<any[]>(this.apiUrl).subscribe(data => {
