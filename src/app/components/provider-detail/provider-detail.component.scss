@@ -1,0 +1,60 @@
+.detalle-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h2 {
+    color: #5c4d7d;
+    margin-bottom: 15px;
+  }
+
+  .etiquetas span {
+    background: #eee;
+    color: #333;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-right: 5px;
+    font-size: 0.85rem;
+  }
+
+  .descripcion {
+    margin-top: 20px;
+  }
+
+  .contacto {
+    margin-top: 20px;
+
+    p {
+      margin: 5px 0;
+    }
+
+    a {
+      color: #5c4d7d;
+      text-decoration: underline;
+    }
+
+    img {
+      margin-top: 10px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 600px;
+    }
+  }
+
+  .galeria {
+    margin-top: 30px;
+
+    .imagenes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+    }
+  }
+}

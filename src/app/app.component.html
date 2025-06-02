@@ -2,72 +2,12 @@
 <div class="center-div">
   <h2>Listado desde API</h2>
 
-  <div class="grid">
-    @for (item of listados(); track $index) {
-      <div class="card fade-in">
-        <div class="img-container">
-          <img 
-            [src]="item.thumbnail || item.prv_image || 'https://via.placeholder.com/400x250?text=Sin+Imagen'" 
-            alt="Imagen destacada">
-          
-          @if (item.meta._featured && item.meta._featured[0] !== '') {
-            <span class="badge">Destacado</span>
-          }
-
-          @if (item.meta._price && item.meta._price[0] !== '') {
-            <span class="price-badge">${{ item.meta._price[0] }}</span>
-          }
-        </div>
-
-        <h3>{{ item.title }}</h3>
-
-        <div class="content">
-          <div class="content-text" [innerHTML]="item.content"></div>
-        </div>
-
-        <a [routerLink]="['/detalle', item.id]" class="button">Ver detalle</a>
-
-      </div>
-    }
-  </div>
-</div>
-<!-- <div class="filtros">
-  <label>
-    Categoría:
-    <input type="text" [value]="categoria()">
-  </label>
-
-  <label>
-    Precio Mínimo:
-    <input type="number" [value]="precioMin()">
-  </label>
-
-  <label>
-    Precio Máximo:
-    <input type="number" [value]="precioMax()">
-  </label>
-
-  
-
-  <label>
-    <input type="checkbox" [checked]="destacado()">
-    Solo destacados
-  </label>
-
-  <button (click)="filtrar()">Filtrar</button>
-  <button (click)="limpiarFiltros()">Limpiar</button>
-</div>
-
-<div class="grilla">
-  @for (item of listados(); track $index) {
-    <div class="card" [class.destacado]="item.meta._featured[0] === '1'">
-      <img [src]="item.thumbnail" alt="" />
-      <h3>{{ item.title }}</h3>
-      <div [innerHTML]="item.content"></div>
-      <a [href]="item.link" target="_blank">Ver</a>
-    </div>
+  @if (!selectedProvider) {
+    <awc-providers-grid (providerSelected)="selectedProvider = $event"></awc-providers-grid>
   }
-</div> -->
 
-<router-outlet></router-outlet>
+  @if (selectedProvider) {
+    <awc-provider-detail [provider]="selectedProvider" (close)="selectedProvider = null"></awc-provider-detail>
+  }
+</div>
 

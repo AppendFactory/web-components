@@ -1,0 +1,112 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0;
+
+  .tab {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background: #f8f8f8;
+    color: #333;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-weight: 500;
+
+    &:hover {
+      background: #e0e0e0;
+    }
+
+    &.active {
+      background: #5c4d7d;
+      color: #fff;
+      border-color: #5c4d7d;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .tabs {
+    flex-wrap: wrap;
+
+    .tab {
+      flex: 1 1 auto;
+      text-align: center;
+    }
+  }
+}
+
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 20px;
+
+  input[type="text"], select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    label {
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #f4f4f4;
+      padding: 4px 8px;
+      border-radius: 16px;
+      border: 1px solid #ddd;
+
+      input[type="checkbox"] {
+        accent-color: #5c4d7d;
+      }
+    }
+  }
+
+  button {
+    padding: 8px 18px;
+    background: #5c4d7d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: #40325e;
+    }
+  }
+}

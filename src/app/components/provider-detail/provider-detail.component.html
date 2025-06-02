@@ -1,0 +1,57 @@
+<button (click)="closeDetail()">Volver</button>
+
+@let prov = detalle();
+
+@if (prov) {
+  <div class="detalle-container">
+
+    <h2>{{ prov.title }}</h2>
+
+    <div class="etiquetas">
+      <strong>Etiquetas:</strong>
+      @for (tag of prov.tags; track $index) {
+        <span>{{ tag }}</span>
+      }
+    </div>
+
+    <div class="descripcion">
+      <h3>Descripción:</h3>
+      <div [innerHTML]="prov.content"></div>
+    </div>
+
+    <div class="contacto">
+      <h3>Contacto:</h3>
+      <p><strong>Domicilio:</strong> {{ prov.address }}</p>
+      <p><strong>Teléfono:</strong> {{ prov.phone }}</p>
+      <p><strong>Whatsapp:</strong> {{ prov.whatsapp }}</p>
+      <p><strong>Email:</strong> {{ prov.email }}</p>
+      <p><strong>Web:</strong> <a [href]="'https://' + prov.website" target="_blank">{{ prov.website }}</a></p>
+
+      @if (prov.lat && prov.lng) {
+        <div>
+          <img 
+            [src]="'https://maps.googleapis.com/maps/api/staticmap?center=' 
+                  + prov.lat + ',' 
+                  + prov.lng 
+                  + '&zoom=14&size=600x300&markers=color:red%7C' 
+                  + prov.lat + ',' 
+                  + prov.lng 
+                  + '&key=TU_API_KEY'"
+            alt="Ubicación en mapa">
+        </div>
+      }
+    </div>
+
+    @if (prov.gallery && prov.gallery.length) {
+      <div class="galeria">
+        <h3>Destacados:</h3>
+        <div class="imagenes">
+          @for (img of prov.gallery; track $index) {
+            <img [src]="img" alt="Imagen destacada">
+          }
+        </div>
+      </div>
+    }
+
+  </div>
+}

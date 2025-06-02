@@ -1,0 +1,27 @@
+<div class="card fade-in" (click)="onClick()" [ngClass]="{ 'destacado': data.type === 'Destacado' }">
+  <div class="img-container">
+    @if (data.type === 'Destacado') {
+      <span class="star-badge">Destacado</span>
+    }
+    @if (data.type === 'Destacado' && data.gallery.length) {
+      <div class="mini-gallery">
+        @for (img of data.gallery.slice(0, 10); track $index) {
+          <img [src]="img" alt="Imagen galería">
+        }
+      </div>
+    } @else {
+      <img 
+        [src]="data.thumbnail || data.prv_image || 'https://via.placeholder.com/250x350?text=Sin+Imagen'" 
+        alt="Imagen destacada">
+    }
+  </div>
+
+  <div class="info">
+    <h3>{{ data.title }}</h3>
+    <p class="desc">{{ data.description_short }}</p>
+    <p class="ubicacion">{{ data.address || 'Ubicación no informada' }}</p>
+  </div>
+
+  <a class="ver-mas">Ver más</a>
+
+</div>
