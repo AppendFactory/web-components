@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Proveedor } from "../../models/listado.mode";
 import { NgClass } from "@angular/common";
+import { ImageSliderComponent } from "../image-slider/image-slider.component";
 
 @Component({
   selector: "awc-provider-card",
-  imports: [NgClass],
+  imports: [NgClass, ImageSliderComponent],
   templateUrl: "./provider-card.component.html",
   styleUrl: "./provider-card.component.scss",
 })

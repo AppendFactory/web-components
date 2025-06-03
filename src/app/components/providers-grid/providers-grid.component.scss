@@ -110,3 +110,44 @@
     }
   }
 }
+
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .tag {
+    padding: 6px 12px;
+    border-radius: 16px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.seleccionado {
+      background-color: #5c4d7d;
+      color: white;
+      border-color: #5c4d7d;
+    }
+
+    &:hover {
+      background-color: #ded2f3;
+    }
+  }
+
+  .limite-msg {
+    font-size: 0.75rem;
+    color: #d00;
+    font-weight: 500;
+  }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem; // mt-6 ≈ 24px
+
+ 
+}
+

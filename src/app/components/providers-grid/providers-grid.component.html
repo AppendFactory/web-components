@@ -4,52 +4,78 @@
     <button class="tab" [class.active]="tabActiva() === 'proveedores'" (click)="cambiarTab('proveedores')">Proveedores</button>
   </div>
 
-  <div class="filtros">
-    <input type="text" placeholder="Buscar empresa..." [(ngModel)]="filtroActivo().nombre">
+  @if(tabActiva() === 'cultivos' || tabActiva() === 'proveedores'){
+    <div class="filtros">
+      <input type="text" placeholder="Buscar empresa..." [(ngModel)]="filtroNombre">
 
-    <select [(ngModel)]="filtroActivo().categoria">
-      <option value="">Todas las categorías</option>
-       @for(cat of categorias; track $index){
-        <option [value]="cat">{{ cat }}</option>
-       }
-      
-    </select>
+      <select [(ngModel)]="filtroCategoria">
+        <option value="">Todas las categorías</option>
+        @for(cat of categorias; track $index){
+          <option [value]="cat">{{ cat }}</option>
+        }
+        
+      </select>
 
-    <div class="etiquetas">
-      @for(tag of etiquetas; track $index){
-        <label>
-        <input type="checkbox"
-              [value]="tag"
-              [checked]="filtroActivo().etiquetas.includes(tag)"
-              (change)="onTagCheckboxChange(tag, $event)">
-        {{ tag }}
-      </label>
+      <div class="etiquetas">
+        @for(tag of tagsDisponibles(); track $index){
+          <div class="tag"
+              [class.seleccionado]="filtroTags().includes(tag)"
+              (click)="toggleTag(tag)">
+            {{ tag }}
+          </div>
+        }
+        @if(filtroTags.length >= 5){
+          <div class="limite-msg">
+            Máximo 5 etiquetas
+          </div>
+        }
+        
+      </div>
+
+      <button (click)="aplicarFiltros()">Buscar</button>
+    </div>
+  }
+  
+  @if(isLoading()){
+    <awc-loading-spinner></awc-loading-spinner>
+  }
+  @else{
+    <div class="grid">
+      @for (item of listados(); track $index) {
+        <awc-provider-card
+          [data]="item"
+          [tab]="tabActiva()"
+          (select)="select(item)">
+        </awc-provider-card>
       }
-      
     </div>
 
-    <button (click)="aplicarFiltros()">Buscar</button>
+     <div class="pagination">
+      <div class="pagination-container">
+        <button
+          [disabled]="currentPage() === 1"
+          (click)="changePage(currentPage() - 1)">
+          &laquo;
+        </button>
+        @for(p of [].constructor(totalPages()); track $index){
+          <button
+            [ngClass]="{ 
+              'active': currentPage() === ($index + 1), 
+              'inactive': currentPage() !== ($index + 1) 
+            }"
+            (click)="changePage($index + 1)">
+            {{ $index + 1 }}
+          </button>
+        }
+
+        <button
+          [disabled]="currentPage === totalPages"
+          (click)="changePage(currentPage() + 1)">
+          &raquo;
+        </button>
+      </div>
   </div>
+  }
 
+ 
 
-  <div class="grid">
-    @for (item of listadosFiltrados(); track $index) {
-      <awc-provider-card
-        [data]="item"
-        [tab]="tabActiva()"
-        (select)="select(item)">
-      </awc-provider-card>
-    }
-  </div>
-
-
-  <div class="pagination">
-    @for (pagina of [].constructor(totalPaginas()); track $index) {
-      <button 
-        class="page-btn" 
-        [class.active]="paginaActual() === $index + 1"
-        (click)="paginaActual.set($index + 1)">
-        {{ $index + 1 }}
-      </button>
-    }
-  </div>

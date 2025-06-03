@@ -1,0 +1,23 @@
+<div class="manual-slider" [class.fullscreen]="fullscreen()" (click)="toggleFullscreen()">
+  <button class="nav prev" (click)="prev($event)">‹</button>
+
+  <img [src]="images[current()]" alt="Imagen del slider">
+
+  <button class="nav next" (click)="next($event)">›</button>
+
+  @if(images.length > 1){
+      <div class="dots">
+        @for (img of images; track $index) {
+          <span 
+            class="dot" 
+            [class.active]="$index === current()" 
+            (click)="goTo($index, $event)">
+          </span>
+        }
+      </div>
+  }
+
+  <!-- <button class="fullscreen-btn" (click)="toggleFullscreen($event)">
+    {{ fullscreen() ? 'Salir' : 'Ampliar' }}
+  </button> -->
+</div>

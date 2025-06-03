@@ -1,4 +1,3 @@
-import { HttpClient } from "@angular/common/http";
 import {
   Component,
   computed,
@@ -11,28 +10,32 @@ import {
 import { Proveedor } from "../../models/listado.mode";
 import { ProviderCardComponent } from "../provider-card/provider-card.component";
 import { FormsModule } from "@angular/forms";
+import { ProviderService } from "../../services/provider.service";
+import { NgClass } from "@angular/common";
+import { LoadingSpinnerComponent } from "../loading-spinner/loading-spinner.component";
 
 @Component({
   selector: "awc-providers-grid",
-  imports: [ProviderCardComponent, FormsModule],
+  imports: [ProviderCardComponent, FormsModule, NgClass, LoadingSpinnerComponent],
   templateUrl: "./providers-grid.component.html",
   styleUrl: "./providers-grid.component.scss",
 })
 export class ProvidersGridComponent implements OnInit {
   @Output() providerSelected = new EventEmitter<any>();
 
-  select(provider: any) {
-    this.providerSelected.emit(provider);
-  }
+  private readonly service = inject(ProviderService);
 
-  private http = inject(HttpClient);
-
+  isLoading = signal(false);
   listados = signal<Proveedor[]>([]);
   tabActiva = signal<"viveros" | "cultivos" | "proveedores">("viveros");
-  paginaActual = signal(1);
-  itemsPorPagina = 12;
+  itemsPerPage = signal(12);
+  currentPage = signal(1);
+  totalPages = signal(1);
 
-  apiUrl = "http://localhost/public_html/wp-json/miapi/v1/listados";
+  filtroNombre = signal("");
+  filtroTags = signal<string[]>([]);
+  filtroCategoria = signal("");
+  filtroDestacado = signal(false);
 
   categorias = [
     "Plantas de Interior",
@@ -41,116 +44,64 @@ export class ProvidersGridComponent implements OnInit {
     "Accesorios",
     "Insumos",
   ];
-  etiquetas = ["Orgánico", "Indoor", "Exterior", "Suculentas", "Acuáticas"];
-
-  filtroCultivos = signal({
-    nombre: "",
-    categoria: "",
-    etiquetas: [] as string[],
-  });
-
-  filtroProveedores = signal({
-    nombre: "",
-    categoria: "",
-    etiquetas: [] as string[],
-  });
 
   ngOnInit() {
-    this.http.get<Proveedor[]>(this.apiUrl).subscribe((data) => {
-      this.listados.set(data);
-    });
+    this.loadPage(1);
   }
 
-  listadosFiltrados = computed(() => {
-    const tab = this.tabActiva();
-    const all = this.listados();
+  loadPage(page: number) {
+    this.isLoading.set(true);
 
-    const filtrados = all.filter((item) => {
-      if (tab === "cultivos") {
-        const filtro = this.filtroCultivos();
-        const nombreOk =
-          !filtro.nombre ||
-          item.title.toLowerCase().includes(filtro.nombre.toLowerCase());
-        const categoriaOk =
-          !filtro.categoria || item.category === filtro.categoria;
-        const etiquetasOk = filtro.etiquetas.every((et) =>
-          item.tags.includes(et)
-        );
-        return nombreOk && categoriaOk && etiquetasOk;
-      }
-      if (tab === "proveedores") {
-        const filtro = this.filtroProveedores();
-        const nombreOk =
-          !filtro.nombre ||
-          item.title.toLowerCase().includes(filtro.nombre.toLowerCase());
-        const categoriaOk =
-          !filtro.categoria || item.category === filtro.categoria;
-        const etiquetasOk = filtro.etiquetas.every((et) =>
-          item.tags.includes(et)
-        );
-        return nombreOk && categoriaOk && etiquetasOk;
-      }
-      return true;
-    });
+    this.service
+      .getListados(
+        page,
+        this.itemsPerPage(),
+        this.filtroNombre(),
+        this.filtroTags(),
+        this.filtroDestacado(),
+        this.filtroCategoria()
+      )
+      .subscribe((response) => {
+        this.listados.set(response.items);
+        this.currentPage.set(response.current_page);
+        this.totalPages.set(response.pages);
+        this.isLoading.set(false);
+      });
+  }
 
-    const destacados = filtrados
-      .filter((i) => i.type === "Destacado")
-      .sort((a, b) => a.title.localeCompare(b.title));
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages()) return;
+    this.loadPage(page);
+  }
 
-    const normales = filtrados
-      .filter((i) => i.type === "Normal")
-      .sort((a, b) => a.title.localeCompare(b.title));
-
-    const ordenados = [...destacados, ...normales];
-    const inicio = (this.paginaActual() - 1) * this.itemsPorPagina;
-    const fin = inicio + this.itemsPorPagina;
-
-    return ordenados.slice(inicio, fin);
+  tagsDisponibles = computed(() => {
+    const allTags = this.listados().flatMap((item) => item.tags);
+    return Array.from(new Set(allTags));
   });
 
   cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
     this.tabActiva.set(tab);
-    this.paginaActual.set(1);
-
-    console.log(tab);
+    this.currentPage.set(1);
   }
 
-  totalPaginas = computed(() => {
-    return Math.ceil(this.listadosFiltrados().length / this.itemsPorPagina);
-  });
+  toggleTag(tag: string) {
+    const currentTags = this.filtroTags();
 
-  filtroActivo() {
-    return this.tabActiva() === "cultivos"
-      ? this.filtroCultivos()
-      : this.filtroProveedores();
-  }
+    const updatedTags = currentTags.includes(tag)
+      ? currentTags.filter((t) => t !== tag)
+      : currentTags.length < 5
+      ? [...currentTags, tag]
+      : currentTags;
 
-  onTagCheckboxChange(tag: string, event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.onTagChange(tag, input.checked);
-  }
-
-  onTagChange(tag: string, checked: boolean) {
-    const isCultivo = this.tabActiva() === "cultivos";
-    const current = isCultivo
-      ? this.filtroCultivos()
-      : this.filtroProveedores();
-    const updated = { ...current };
-
-    if (checked) {
-      if (updated.etiquetas.length < 5) {
-        updated.etiquetas.push(tag);
-      }
-    } else {
-      updated.etiquetas = updated.etiquetas.filter((t) => t !== tag);
-    }
-
-    isCultivo
-      ? this.filtroCultivos.set(updated)
-      : this.filtroProveedores.set(updated);
+    this.filtroTags.set(updatedTags);
   }
 
   aplicarFiltros() {
-    this.paginaActual.set(1);
+    this.currentPage.set(1);
+    this.loadPage(1);
+  }
+
+  select(provider: any) {
+    this.providerSelected.emit(provider);
   }
 }
