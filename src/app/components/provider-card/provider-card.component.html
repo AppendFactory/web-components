@@ -4,16 +4,11 @@
       <span class="star-badge">Destacado</span>
     }
     @if (data.type === 'Destacado' && data.gallery.length) {
-      <div class="mini-gallery">
-        <!-- @for (img of data.gallery.slice(0, 10); track $index) {
-          <img [src]="img" alt="Imagen galería">
-        } -->
-        <awc-image-slider
+       <awc-image-slider
           [images]="data.gallery"
           [autoSlide]="false"
           [interval]="4000">
         </awc-image-slider>
-      </div>
     } @else {
       <img 
         [src]="data.thumbnail || data.prv_image || 'https://via.placeholder.com/250x350?text=Sin+Imagen'" 

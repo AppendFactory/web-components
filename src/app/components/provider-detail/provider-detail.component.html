@@ -1,4 +1,4 @@
-<button (click)="closeDetail()">Volver</button>
+<button (click)="closeDetail()">⟵ Volver</button>
 
 @if (isLoading()) {
   <awc-loading-spinner></awc-loading-spinner>
@@ -9,66 +9,75 @@
 
     <div class="detalle-container">
   
-      <awc-image-slider
-            [images]="prov.gallery"
-            [autoSlide]="true"
-            [interval]="4000">
-          </awc-image-slider>
+      @if (prov.gallery.length && prov.type === 'Destacado') {
+        <awc-image-slider
+          [images]="prov.gallery"
+          [autoSlide]="true"
+          [interval]="4000">
+        </awc-image-slider>
+      } @else {
+        <div class="imagen-principal">
+        <img  class="imagen-principal"
+          [src]="prov.thumbnail || prov.prv_image || 'https://via.placeholder.com/250x350?text=Sin+Imagen'" 
+          alt="Imagen destacada">
+      </div>
+        
+      }
   
       <h2>{{ prov.title }}</h2>
   
       <div class="etiquetas">
-        <strong>Etiquetas:</strong>
+        <!-- <strong>Etiquetas:</strong> -->
         @for (tag of prov.tags; track $index) {
           <span>{{ tag }}</span>
         }
       </div>
   
       <div class="descripcion">
-        <h3>Descripción:</h3>
         <div>{{prov.description_full}}</div>
       </div>
   
-      <div class="contacto">
-        <h3>Contacto:</h3>
-        <p><strong>Domicilio:</strong> {{ prov.address }}</p>
-        <p><strong>Teléfono:</strong> {{ prov.phone }}</p>
-        <p><strong>Email:</strong> {{ prov.email }}</p>
-        <p><strong>Web:</strong> <a [href]="prov.website" target="_blank"> {{ prov.website }}</a></p>
-        <p><strong>Tienda:</strong> <a [href]="prov.store" target="_blank"> {{ prov.store }}</a></p>
-  
-        @for(red of prov.social; track $index){
-        <p><strong>{{red.id}}:</strong> <a [href]="red.url" target="_blank">{{ red.url }}</a> </p>
-        }
-  
-        <p><strong>Horario:</strong> De {{ prov.time_open }} a {{ prov.time_close }}hs</p>
-  
+      <div class="info-container">
+        <div class="contacto">
+          <h4>Contacto:</h4>
+          <p><strong>Domicilio:</strong> {{ prov.address }}</p>
+          <p><strong>Teléfono:</strong> {{ prov.phone }}</p>
+          <p><strong>Email:</strong> {{ prov.email }}</p>
+          <p><strong>Web:</strong> <a [href]="prov.website" target="_blank"> {{ prov.website }}</a></p>
+          <p><strong>Tienda:</strong> <a [href]="prov.store" target="_blank"> {{ prov.store }}</a></p>
+
+          @for(red of prov.social; track $index){
+            <p><strong>{{red.id}}:</strong> <a [href]="red.url" target="_blank"> {{ red.url }}</a></p>
+          }
+
+          <p><strong>Horario:</strong> De {{ prov.time_open }} a {{ prov.time_close }}hs</p>
+        </div>
+
         @if (prov.lat && prov.lng) {
-          <div>
+          <div class="mapa">
             <img 
               [src]="'https://maps.googleapis.com/maps/api/staticmap?center=' 
                     + prov.lat + ',' 
                     + prov.lng 
-                    + '&zoom=14&size=600x300&markers=color:red%7C' 
+                    + '&zoom=14&size=500x300&markers=color:red%7C' 
                     + prov.lat + ',' 
                     + prov.lng 
-                    + '&key=AIzaSyAs0kBnXKPQjJ1EquTeyGupyx2pRllKALg'"
+                    + '&key=AIzaSyBGX45DwEtcg6I31Qu7KQR99QlLFoTzpew'"
               alt="Ubicación en mapa">
+
+            <a 
+              [href]="'https://www.google.com/maps/search/?api=1&query=' + prov.lat + ',' + prov.lng"
+              target="_blank"
+              class="como-llegar-btn">
+              📍 Cómo llegar
+            </a>
+            
           </div>
         }
       </div>
   
-      @if (prov.gallery && prov.gallery.length) {
-        <div class="galeria">
-          <h3>Destacados:</h3>
-          <div class="imagenes">
-            @for (img of prov.gallery; track $index) {
-              <img [src]="img" alt="Imagen destacada">
-            }
-          </div>
-        </div>
-      }
-  
     </div>
   }
 }
+
+

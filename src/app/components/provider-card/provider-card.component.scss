@@ -52,21 +52,6 @@
       display: block;
     }
 
-    .mini-gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 4px;
-      padding: 4px;
-
-      img {
-        width: 48px;
-        height: 48px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid #ddd;
-      }
-    }
   }
 
   .info {
