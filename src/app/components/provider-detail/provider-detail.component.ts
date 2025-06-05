@@ -11,6 +11,7 @@ import { Proveedor } from "../../models/listado.mode";
 import { ImageSliderComponent } from "../image-slider/image-slider.component";
 import { ProviderService } from "../../services/provider.service";
 import { LoadingSpinnerComponent } from "../loading-spinner/loading-spinner.component";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 @Component({
   selector: "awc-provider-detail",
@@ -23,11 +24,11 @@ export class ProviderDetailComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
   isLoading = signal(false);
-
-  apiUrl = "http://localhost/public_html/wp-json/miapi/v1/listados";
-  detalle = signal<Proveedor | null>(null);
+ mapaUrl = signal<SafeResourceUrl | null>(null);
 
   private readonly service = inject(ProviderService);
+  private sanitizer = inject(DomSanitizer);
+  detalle = signal<Proveedor | null>(null);
 
   ngOnInit() {
     if (this.provider?.id) {
@@ -35,6 +36,12 @@ export class ProviderDetailComponent implements OnInit {
       this.service.getProviderById(this.provider.id).subscribe((data) => {
         console.log(data);
         this.detalle.set(data);
+
+         if (data.lat && data.lng) {
+          const url = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAs0kBnXKPQjJ1EquTeyGupyx2pRllKALg&q=${data.lat},${data.lng}`;
+          this.mapaUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(url));
+        }
+
         this.isLoading.set(false);
       });
     }

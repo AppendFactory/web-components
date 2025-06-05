@@ -54,7 +54,7 @@
         </div>
 
         @if (prov.lat && prov.lng) {
-          <div class="mapa">
+          <!-- <div class="mapa">
             <img 
               [src]="'https://maps.googleapis.com/maps/api/staticmap?center=' 
                     + prov.lat + ',' 
@@ -72,7 +72,21 @@
               📍 Cómo llegar
             </a>
             
-          </div>
+          </div> -->
+          @if(mapaUrl()){
+            <div class="mapa">
+              <iframe 
+                width="100%" 
+                height="300" 
+                [src]="mapaUrl()"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+          }
+          
+
         }
       </div>
   
