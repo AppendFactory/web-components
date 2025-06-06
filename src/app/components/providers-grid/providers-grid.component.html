@@ -6,17 +6,19 @@
 
   @if(tabActiva() === 'cultivos' || tabActiva() === 'proveedores'){
     <div class="filtros">
-      <input type="text" placeholder="Buscar empresa..." [(ngModel)]="filtroNombre">
-
-      <select [(ngModel)]="filtroCategoria">
-        <option value="">Todas las categorías</option>
-        @for(cat of categorias; track $index){
-          <option [value]="cat">{{ cat }}</option>
-        }
-        
-      </select>
+      <div class="inputs">
+        <input type="text" placeholder="Buscar empresa..." [(ngModel)]="filtroNombre">
+  
+        <select [(ngModel)]="filtroCategoria">
+          <option value="">Todas las categorías</option>
+          @for(cat of categorias(); track $index){
+            <option [value]="cat.id">{{ cat.name }}</option>
+          }
+        </select>
+      </div>
 
       <div class="etiquetas">
+        <div class="tags">
         @for(tag of tagsDisponibles(); track $index){
           <div class="tag"
               [class.seleccionado]="filtroTags().includes(tag)"
@@ -29,10 +31,12 @@
             Máximo 5 etiquetas
           </div>
         }
+        </div>
         
+        <button (click)="aplicarFiltros()">Buscar</button>
       </div>
 
-      <button (click)="aplicarFiltros()">Buscar</button>
+      
     </div>
   }
   
@@ -55,7 +59,9 @@
         <button
           [disabled]="currentPage() === 1"
           (click)="changePage(currentPage() - 1)">
-          &laquo;
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18L9 12L15 6" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
         @for(p of [].constructor(totalPages()); track $index){
           <button
@@ -71,7 +77,9 @@
         <button
           [disabled]="currentPage === totalPages"
           (click)="changePage(currentPage() + 1)">
-          &raquo;
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18L15 12L9 6" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
       </div>
   </div>

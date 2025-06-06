@@ -38,7 +38,7 @@ export class ProviderDetailComponent implements OnInit {
         this.detalle.set(data);
 
          if (data.lat && data.lng) {
-          const url = `https://www.google.com/maps/embed/v1/place?key=AIzaSyAs0kBnXKPQjJ1EquTeyGupyx2pRllKALg&q=${data.lat},${data.lng}`;
+          const url = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGX45DwEtcg6I31Qu7KQR99QlLFoTzpew&q=${data.lat},${data.lng}`;
           this.mapaUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(url));
         }
 

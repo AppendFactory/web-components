@@ -36,14 +36,7 @@ export class ProvidersGridComponent implements OnInit {
   filtroTags = signal<string[]>([]);
   filtroCategoria = signal("");
   filtroDestacado = signal(false);
-
-  categorias = [
-    "Plantas de Interior",
-    "Plantas de Jardín",
-    "Mayorista",
-    "Accesorios",
-    "Insumos",
-  ];
+  categorias = signal<{ id: number, name: string }[]>([]);
 
   ngOnInit() {
     this.loadPage(1);
@@ -59,7 +52,8 @@ export class ProvidersGridComponent implements OnInit {
         this.filtroNombre(),
         this.filtroTags(),
         this.filtroDestacado(),
-        this.filtroCategoria()
+        this.filtroCategoria(),
+        this.tabActiva()
       )
       .subscribe((response) => {
         this.listados.set(response.items);
@@ -79,10 +73,16 @@ export class ProvidersGridComponent implements OnInit {
     return Array.from(new Set(allTags));
   });
 
-  cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
-    this.tabActiva.set(tab);
-    this.currentPage.set(1);
-  }
+cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
+  this.tabActiva.set(tab);
+  this.currentPage.set(1);
+
+  this.service.getCategoriasPorTab(tab).subscribe(cats => {
+    this.categorias.set(cats);
+  });
+
+  this.loadPage(1);
+}
 
   toggleTag(tag: string) {
     const currentTags = this.filtroTags();

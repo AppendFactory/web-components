@@ -1,5 +1,5 @@
 
-<div class="center-div">
+<!-- <div class="center-div"> -->
 
   @if (!selectedProvider) {
     <awc-providers-grid (providerSelected)="selectedProvider = $event"></awc-providers-grid>
@@ -8,5 +8,5 @@
   @if (selectedProvider) {
     <awc-provider-detail [provider]="selectedProvider" (close)="selectedProvider = null"></awc-provider-detail>
   }
-</div>
+<!-- </div> -->
 

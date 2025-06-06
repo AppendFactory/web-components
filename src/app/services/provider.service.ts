@@ -6,7 +6,7 @@ import { Proveedor } from "../models/listado.mode";
   providedIn: "root",
 })
 export class ProviderService {
-  private apiUrl = "http://localhost/public_html/wp-json/miapi/v1/listados";
+  private apiUrl = "http://localhost/public_html/wp-json/miapi/v1";
 
   constructor(private http: HttpClient) {}
 
@@ -16,7 +16,8 @@ export class ProviderService {
     nombre?: string,
     tags?: string[],
     destacado?: boolean,
-    categoria?: string
+    categoria?: string,
+    tab?: string
   ) {
     let params = new HttpParams().set("page", page).set("per_page", perPage);
 
@@ -36,15 +37,23 @@ export class ProviderService {
       params = params.set("category", categoria);
     }
 
+    if(tab){
+      params = params.set("tab", tab);
+    }
+
     return this.http.get<{
       items: any[];
       total: number;
       pages: number;
       current_page: number;
-    }>(this.apiUrl, { params });
+    }>(this.apiUrl + '/listados', { params });
   }
 
   getProviderById(id: number) {
-    return this.http.get<Proveedor>(`${this.apiUrl}/${id}`);
+    return this.http.get<Proveedor>(`${this.apiUrl}/listados/${id}`);
   }
+
+  getCategoriasPorTab(tab: string) {
+  return this.http.get<any[]>(`${this.apiUrl}/categorias?parent=${tab}`);
+}
 }
