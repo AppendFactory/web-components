@@ -70,7 +70,7 @@
     select {
       padding: 8px 12px;
       border: 1px solid #ddd;
-      border-radius: 3px;
+      // border-radius: 3px;
       font-size: 0.9rem;
       min-width: 200px;
       width: 300px;
@@ -121,7 +121,7 @@
       // background: #5c4d7d;
       // color: #fff;
       border: none;
-      border-radius: 6px;
+      // border-radius: 6px;
       font-size: 0.85rem;
       cursor: pointer;
       transition: background 0.3s ease;
@@ -143,61 +143,6 @@
     }
   }
 }
-
-// .filtros {
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 12px;
-//   align-items: center;
-//   padding: 10px 0;
-//   margin-bottom: 20px;
-
-//   input[type="text"], select {
-//     padding: 8px 12px;
-//     border: 1px solid #ddd;
-//     border-radius: 6px;
-//     font-size: 0.9rem;
-//     flex: 1;
-//     min-width: 180px;
-//   }
-
-//   .etiquetas {
-//     display: flex;
-//     flex-wrap: wrap;
-//     gap: 8px;
-
-//     label {
-//       font-size: 0.8rem;
-//       display: flex;
-//       align-items: center;
-//       gap: 4px;
-//       background: #f4f4f4;
-//       padding: 4px 8px;
-//       border-radius: 16px;
-//       border: 1px solid #ddd;
-
-//       input[type="checkbox"] {
-//         accent-color: #5c4d7d;
-//       }
-//     }
-//   }
-
-//   button {
-//     padding: 10px 18px;
-//     // background: #5c4d7d;
-//     // color: #fff;
-//     border: none;
-//     border-radius: 3px;
-//     font-size: 0.85rem;
-//     cursor: pointer;
-//     transition: background 0.3s ease;
-
-//     &:hover {
-//       background: #40325e;
-//       color: white;
-//     }
-//   }
-// }
 
 .etiquetas {
   display: flex;
@@ -243,7 +188,7 @@
     color: #333;
     border: 1px solid #ddd;
     padding: 8px 14px;
-    border-radius: 6px;
+    // border-radius: 6px;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.25s ease;

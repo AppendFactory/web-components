@@ -6,7 +6,8 @@ import { Proveedor } from "../models/listado.mode";
   providedIn: "root",
 })
 export class ProviderService {
-  private apiUrl = "http://localhost/public_html/wp-json/miapi/v1";
+  // private apiUrl = "http://localhost/public_html/wp-json/miapi/v1";
+  private apiUrl = "https://revistaviveros.com.ar/wp-json/miapi/v1";
 
   constructor(private http: HttpClient) {}
 
