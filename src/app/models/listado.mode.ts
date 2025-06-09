@@ -22,4 +22,8 @@ export interface Proveedor {
   website: string;
   store: string;
   social: { id: string; url: string }[];
+    notas: {
+    texto: string;
+    imagenes: string[];
+  }[];
 }

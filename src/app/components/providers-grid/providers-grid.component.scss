@@ -63,6 +63,7 @@
   .inputs {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 12px;
     padding: 10px 0;
 
@@ -70,10 +71,10 @@
     select {
       padding: 8px 12px;
       border: 1px solid #ddd;
-      // border-radius: 3px;
       font-size: 0.9rem;
       min-width: 200px;
       width: 300px;
+      flex: 1;
     }
   }
 
@@ -81,19 +82,21 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
+
     .tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
 
       .tag {
-        // padding: 8px 10px;
         border-radius: 16px;
         border: 1px solid #ccc;
         background-color: #f4f4f4;
         font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.2s ease;
+        padding: 6px 12px;
 
         &.seleccionado {
           background-color: #5c4d7d;
@@ -118,14 +121,11 @@
     .buttons {
       display: flex;
       gap: 5px;
-      
+      flex-wrap: wrap;
+
       button {
-        align-self: flex-end;
         padding: 10px 18px;
-        // background: #5c4d7d;
-        // color: #fff;
         border: none;
-        // border-radius: 6px;
         font-size: 0.85rem;
         cursor: pointer;
         transition: background 0.3s ease;
@@ -139,45 +139,37 @@
   }
 }
 
+/* 📱 Mobile optimizado */
 @media (max-width: 600px) {
   .filtros {
-    align-items: stretch;
+    .inputs {
+      flex-direction: column;
+      gap: 10px;
 
-    button {
-      align-self: stretch;
-    }
-  }
-}
-
-.etiquetas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-
-  .tag {
-    padding: 6px 12px;
-    border-radius: 16px;
-    border: 1px solid #ccc;
-    background-color: #f4f4f4;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &.seleccionado {
-      background-color: #5c4d7d;
-      color: white;
-      border-color: #5c4d7d;
+      input[type="text"],
+      select {
+        min-width: 100%;
+        width: 100%;
+      }
     }
 
-    &:hover {
-      background-color: #ded2f3;
-    }
-  }
+    .etiquetas {
+      flex-direction: column;
+      gap: 12px;
 
-  .limite-msg {
-    font-size: 0.75rem;
-    color: tomato;
-    font-weight: 500;
+      .tags {
+        justify-content: flex-start;
+      }
+
+      .buttons {
+        width: 100%;
+        justify-content: space-between;
+
+        button {
+          flex: 1 1 auto;
+        }
+      }
+    }
   }
 }
 

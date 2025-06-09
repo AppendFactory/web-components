@@ -27,9 +27,9 @@
       <h2>{{ prov.title }}</h2>
   
       <div class="etiquetas">
-        <!-- <strong>Etiquetas:</strong> -->
         @for (tag of prov.tags; track $index) {
-          <span>{{ tag }}</span>
+          
+            <span> {{ tag.charAt(0).toUpperCase() + tag.slice(1) }}@if($index < prov.tags.length - 1){,} </span>
         }
       </div>
   
@@ -52,27 +52,8 @@
 
           <p><strong>Horario:</strong> De {{ prov.time_open }} a {{ prov.time_close }}hs</p>
         </div>
-
-        @if (prov.lat && prov.lng) {
-          <!-- <div class="mapa">
-            <img 
-              [src]="'https://maps.googleapis.com/maps/api/staticmap?center=' 
-                    + prov.lat + ',' 
-                    + prov.lng 
-                    + '&zoom=14&size=500x300&markers=color:red%7C' 
-                    + prov.lat + ',' 
-                    + prov.lng 
-                    + '&key=AIzaSyBGX45DwEtcg6I31Qu7KQR99QlLFoTzpew'"
-              alt="Ubicación en mapa">
-
-            <a 
-              [href]="'https://www.google.com/maps/search/?api=1&query=' + prov.lat + ',' + prov.lng"
-              target="_blank"
-              class="como-llegar-btn">
-              📍 Cómo llegar
-            </a>
-            
-          </div> -->
+        
+        @if (prov.type === 'Destacado' && prov.lat && prov.lng) {
           @if(mapaUrl()){
             <div class="mapa">
               <iframe 
@@ -91,6 +72,26 @@
       </div>
   
     </div>
+
+    @if(prov.type === 'Destacado' &&  prov.notas && prov.notas.length){
+      <div class="notas">
+        <h3>Notas</h3>
+  
+        @for (nota of prov.notas; track $index) {
+          <div class="nota-card">
+            <p class="nota-texto">{{ nota.texto }}</p>
+            @if (nota.imagenes && nota.imagenes.length) {
+              <div class="nota-imagenes">
+                @for (img of nota.imagenes; track $index) {
+                  <img [src]="img" alt="Imagen de nota">
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
   }
 }
 

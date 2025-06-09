@@ -7,14 +7,14 @@
   @if(tabActiva() === 'viveros'){
     <div class="filtros">
       <div class="inputs">
-        <select [(ngModel)]="selectedParentLocation">
-          <option value="">Seleccionar provincia</option>
+        <select [(ngModel)]="selectedParentLocation" (change)="onParentLocationChange($event)">
+          <option [ngValue]="null">Seleccionar provincia</option>
           @for(loc of locations(); track $index){
             <option [value]="loc.id">{{ loc.name }}</option>
           }
         </select>
 
-        <select (change)="onChildLocationChange($event)">
+        <select id="childLocationSelect" (change)="onChildLocationChange($event)">
           <option value="">Seleccionar localidad</option>
           @for(child of childLocations(); track $index){
             <option [value]="child.name">{{ child.name }}</option>
@@ -25,6 +25,9 @@
       </div>
 
       <div class="etiquetas">
+        <div class="tags">
+          
+        </div>
         <div class="buttons">
           <button (click)="limpiarFiltros()">Limpiar</button>
           <button (click)="aplicarFiltros()">Buscar</button>

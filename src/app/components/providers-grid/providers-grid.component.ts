@@ -52,6 +52,7 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
     { id: number; name: string; children: { id: number; name: string }[] }[]
   >([]);
   selectedParentLocation = signal<number | null>(null);
+
   childLocations = computed(() => {
     const parent = this.locations().find(
       (l) => l.id === this.selectedParentLocation()
@@ -67,22 +68,26 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const input = document.getElementById("ubicacionInput") as HTMLInputElement;
-    if (input) {
-      const autocomplete = new google.maps.places.Autocomplete(input, {
-        types: ["(regions)"],
-        componentRestrictions: { country: "AR" },
-      });
+    this.loadGoogleMapsApi().then(() => {
+      const input = document.getElementById(
+        "ubicacionInput"
+      ) as HTMLInputElement;
+      if (input) {
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+          types: ["(regions)"],
+          componentRestrictions: { country: "AR" },
+        });
 
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (place.formatted_address) {
-          this.filtroUbicacion.set(place.formatted_address);
-        } else if (place.name) {
-          this.filtroUbicacion.set(place.name);
-        }
-      });
-    }
+        autocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+          if (place.formatted_address) {
+            this.filtroUbicacion.set(place.formatted_address);
+          } else if (place.name) {
+            this.filtroUbicacion.set(place.name);
+          }
+        });
+      }
+    });
   }
 
   loadPage(page: number) {
@@ -149,9 +154,32 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
     this.providerSelected.emit(provider);
   }
 
+  onParentLocationChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    if (value) {
+      const parent = this.locations().find((loc) => loc.id === +value);
+      if (parent) {
+        this.filtroUbicacion.set(parent.name);
+        this.selectedParentLocation.set(+value);
+      }
+    } else {
+      this.filtroUbicacion.set("");
+      this.selectedParentLocation.set(null);
+    }
+
+    const childSelect = document.getElementById(
+      "childLocationSelect"
+    ) as HTMLSelectElement;
+    if (childSelect) {
+      childSelect.value = "";
+    }
+  }
+
   onChildLocationChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
-    this.filtroUbicacion.set(value);
+    if (value) {
+      this.filtroUbicacion.set(value);
+    }
   }
 
   selectedParentLocationEffect = effect(() => {
@@ -170,5 +198,23 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
     this.cleanFilters();
     this.currentPage.set(1);
     this.loadPage(1);
+  }
+
+  loadGoogleMapsApi(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if ((window as any).google && (window as any).google.maps) {
+        resolve();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src =
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyBGX45DwEtcg6I31Qu7KQR99QlLFoTzpew&libraries=places";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => resolve();
+      script.onerror = (err) => reject(err);
+      document.head.appendChild(script);
+    });
   }
 }
