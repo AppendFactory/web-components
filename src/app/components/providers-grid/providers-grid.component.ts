@@ -1,6 +1,8 @@
 import {
+  AfterViewInit,
   Component,
   computed,
+  effect,
   EventEmitter,
   inject,
   OnInit,
@@ -14,13 +16,20 @@ import { ProviderService } from "../../services/provider.service";
 import { NgClass } from "@angular/common";
 import { LoadingSpinnerComponent } from "../loading-spinner/loading-spinner.component";
 
+declare const google: any;
+
 @Component({
   selector: "awc-providers-grid",
-  imports: [ProviderCardComponent, FormsModule, NgClass, LoadingSpinnerComponent],
+  imports: [
+    ProviderCardComponent,
+    FormsModule,
+    NgClass,
+    LoadingSpinnerComponent,
+  ],
   templateUrl: "./providers-grid.component.html",
   styleUrl: "./providers-grid.component.scss",
 })
-export class ProvidersGridComponent implements OnInit {
+export class ProvidersGridComponent implements OnInit, AfterViewInit {
   @Output() providerSelected = new EventEmitter<any>();
 
   private readonly service = inject(ProviderService);
@@ -36,10 +45,44 @@ export class ProvidersGridComponent implements OnInit {
   filtroTags = signal<string[]>([]);
   filtroCategoria = signal("");
   filtroDestacado = signal(false);
-  categorias = signal<{ id: number, name: string }[]>([]);
+  filtroUbicacion = signal("");
+  categorias = signal<{ id: number; name: string }[]>([]);
+
+  locations = signal<
+    { id: number; name: string; children: { id: number; name: string }[] }[]
+  >([]);
+  selectedParentLocation = signal<number | null>(null);
+  childLocations = computed(() => {
+    const parent = this.locations().find(
+      (l) => l.id === this.selectedParentLocation()
+    );
+    return parent ? parent.children : [];
+  });
 
   ngOnInit() {
+    this.service.getLocations().subscribe((locations) => {
+      this.locations.set(locations);
+    });
     this.loadPage(1);
+  }
+
+  ngAfterViewInit() {
+    const input = document.getElementById("ubicacionInput") as HTMLInputElement;
+    if (input) {
+      const autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ["(regions)"],
+        componentRestrictions: { country: "AR" },
+      });
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place.formatted_address) {
+          this.filtroUbicacion.set(place.formatted_address);
+        } else if (place.name) {
+          this.filtroUbicacion.set(place.name);
+        }
+      });
+    }
   }
 
   loadPage(page: number) {
@@ -53,7 +96,8 @@ export class ProvidersGridComponent implements OnInit {
         this.filtroTags(),
         this.filtroDestacado(),
         this.filtroCategoria(),
-        this.tabActiva()
+        this.tabActiva(),
+        this.filtroUbicacion()
       )
       .subscribe((response) => {
         this.listados.set(response.items);
@@ -73,16 +117,16 @@ export class ProvidersGridComponent implements OnInit {
     return Array.from(new Set(allTags));
   });
 
-cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
-  this.tabActiva.set(tab);
-  this.currentPage.set(1);
+  cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
+    this.tabActiva.set(tab);
+    this.currentPage.set(1);
 
-  this.service.getCategoriasPorTab(tab).subscribe(cats => {
-    this.categorias.set(cats);
-  });
-
-  this.loadPage(1);
-}
+    this.service.getCategoriasPorTab(tab).subscribe((cats) => {
+      this.categorias.set(cats);
+    });
+    this.cleanFilters();
+    this.loadPage(1);
+  }
 
   toggleTag(tag: string) {
     const currentTags = this.filtroTags();
@@ -103,5 +147,28 @@ cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
 
   select(provider: any) {
     this.providerSelected.emit(provider);
+  }
+
+  onChildLocationChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.filtroUbicacion.set(value);
+  }
+
+  selectedParentLocationEffect = effect(() => {
+    this.filtroUbicacion.set("");
+  });
+
+  cleanFilters() {
+    this.filtroNombre.set("");
+    this.filtroTags.set([]);
+    this.filtroCategoria.set("");
+    this.filtroUbicacion.set("");
+    this.categorias.set([]);
+  }
+
+  limpiarFiltros() {
+    this.cleanFilters();
+    this.currentPage.set(1);
+    this.loadPage(1);
   }
 }

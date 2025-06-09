@@ -18,7 +18,8 @@ export class ProviderService {
     tags?: string[],
     destacado?: boolean,
     categoria?: string,
-    tab?: string
+    tab?: string,
+    ubicacion?: string
   ) {
     let params = new HttpParams().set("page", page).set("per_page", perPage);
 
@@ -38,8 +39,12 @@ export class ProviderService {
       params = params.set("category", categoria);
     }
 
-    if(tab){
+    if (tab) {
       params = params.set("tab", tab);
+    }
+
+    if (ubicacion) {
+      params = params.set("ubicacion", ubicacion);
     }
 
     return this.http.get<{
@@ -47,7 +52,7 @@ export class ProviderService {
       total: number;
       pages: number;
       current_page: number;
-    }>(this.apiUrl + '/listados', { params });
+    }>(this.apiUrl + "/listados", { params });
   }
 
   getProviderById(id: number) {
@@ -55,6 +60,11 @@ export class ProviderService {
   }
 
   getCategoriasPorTab(tab: string) {
-  return this.http.get<any[]>(`${this.apiUrl}/categorias?parent=${tab}`);
-}
+    return this.http.get<any[]>(`${this.apiUrl}/categorias?parent=${tab}`);
+  }
+
+  getLocations(){
+    return this.http.get<any[]>(`${this.apiUrl}/locations`);
+  }
+
 }
