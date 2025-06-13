@@ -26,4 +26,10 @@ export interface Proveedor {
     texto: string;
     imagenes: string[];
   }[];
+   horarios: {
+    [dia: string]: {
+      desde: string;
+      hasta: string;
+    };
+  };
 }

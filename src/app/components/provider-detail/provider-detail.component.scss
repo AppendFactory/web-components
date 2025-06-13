@@ -71,6 +71,7 @@
   .redes,
   .mapa {
     margin-top: 20px;
+    // align-content: end;
 
     h3 {
       color: #333;
@@ -112,6 +113,34 @@
         object-fit: cover;
         // border-radius: 8px;
       }
+    }
+  }
+    h4{
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+ .horarios-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+    max-width: 300px;
+
+    .fila {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      color: #444;
+      padding: 0px 20px;
+    }
+
+    .dia {
+      font-weight: 600;
+      color: #5c4d7d;
+    }
+
+    .horario {
+      color: #333;
     }
   }
 }

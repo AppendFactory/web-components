@@ -11,7 +11,11 @@ import { Proveedor } from "../../models/listado.mode";
 import { ImageSliderComponent } from "../image-slider/image-slider.component";
 import { ProviderService } from "../../services/provider.service";
 import { LoadingSpinnerComponent } from "../loading-spinner/loading-spinner.component";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import {
+  DomSanitizer,
+  SafeHtml,
+  SafeResourceUrl,
+} from "@angular/platform-browser";
 
 @Component({
   selector: "awc-provider-detail",
@@ -24,7 +28,16 @@ export class ProviderDetailComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
   isLoading = signal(false);
- mapaUrl = signal<SafeResourceUrl | null>(null);
+  mapaUrl = signal<SafeResourceUrl | null>(null);
+  dias = [
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+    "Domingo",
+  ];
 
   private readonly service = inject(ProviderService);
   private sanitizer = inject(DomSanitizer);
@@ -34,10 +47,9 @@ export class ProviderDetailComponent implements OnInit {
     if (this.provider?.id) {
       this.isLoading.set(true);
       this.service.getProviderById(this.provider.id).subscribe((data) => {
-        console.log(data);
         this.detalle.set(data);
 
-         if (data.lat && data.lng) {
+        if (data.lat && data.lng) {
           const url = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBGX45DwEtcg6I31Qu7KQR99QlLFoTzpew&q=${data.lat},${data.lng}`;
           this.mapaUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(url));
         }
@@ -49,5 +61,9 @@ export class ProviderDetailComponent implements OnInit {
 
   closeDetail() {
     this.close.emit();
+  }
+
+  getSanitizedContent(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 }

@@ -60,6 +60,12 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
     return parent ? parent.children : [];
   });
 
+  tabToCategory = {
+    viveros: "Viveros atención público",
+    cultivos: "Cultivos",
+    proveedores: "Proveedores",
+  };
+
   ngOnInit() {
     this.service.getLocations().subscribe((locations) => {
       this.locations.set(locations);
@@ -93,6 +99,8 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
   loadPage(page: number) {
     this.isLoading.set(true);
 
+    const tabCategoria = this.tabToCategory[this.tabActiva()] || '';
+
     this.service
       .getListados(
         page,
@@ -101,7 +109,7 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
         this.filtroTags(),
         this.filtroDestacado(),
         this.filtroCategoria(),
-        this.tabActiva(),
+        tabCategoria,
         this.filtroUbicacion()
       )
       .subscribe((response) => {

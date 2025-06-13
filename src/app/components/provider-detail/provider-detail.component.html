@@ -32,16 +32,22 @@
             <span> {{ tag.charAt(0).toUpperCase() + tag.slice(1) }}@if($index < prov.tags.length - 1){,} </span>
         }
       </div>
-  
-      <div class="descripcion">
-        <div>{{prov.description_full}}</div>
-      </div>
+
+      @if (prov.type === 'Destacado') {
+        <div class="descripcion" [innerHTML]="getSanitizedContent(prov.content)"></div>
+
+        <div class="descripcion">
+          {{prov.description_full}}
+        </div>
+      }
+
   
       <div class="info-container">
         <div class="contacto">
           <h4>Contacto:</h4>
           <p><strong>Domicilio:</strong> {{ prov.address }}</p>
           <p><strong>Teléfono:</strong> {{ prov.phone }}</p>
+          <p><strong>Whatsapp:</strong> {{ prov.whatsapp }}</p>
           <p><strong>Email:</strong> {{ prov.email }}</p>
           <p><strong>Web:</strong> <a [href]="prov.website" target="_blank"> {{ prov.website }}</a></p>
           <p><strong>Tienda:</strong> <a [href]="prov.store" target="_blank"> {{ prov.store }}</a></p>
@@ -50,7 +56,24 @@
             <p><strong>{{red.id}}:</strong> <a [href]="red.url" target="_blank"> {{ red.url }}</a></p>
           }
 
-          <p><strong>Horario:</strong> De {{ prov.time_open }} a {{ prov.time_close }}hs</p>
+          <div class="horarios" style="padding-right: 100px;">
+            <h4>Horarios:</h4>
+            <div class="horarios-lista">
+              @for(dia of dias; track $index){
+                <div class="fila">
+                  <span class="dia">{{ dia }}</span>
+                  <span class="horario">
+                    {{
+                      prov?.horarios?.[dia.toLowerCase()]?.desde || prov?.horarios?.[dia.toLowerCase()]?.hasta 
+                        ? (prov?.horarios?.[dia.toLowerCase()]?.desde || '') + 
+                          (prov?.horarios?.[dia.toLowerCase()]?.hasta ? ' - ' + prov?.horarios?.[dia.toLowerCase()]?.hasta : '')
+                        : 'Cerrado'
+                    }}
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
         </div>
         
         @if (prov.type === 'Destacado' && prov.lat && prov.lng) {
