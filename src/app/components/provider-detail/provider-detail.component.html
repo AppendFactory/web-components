@@ -46,11 +46,12 @@
         <div class="contacto">
           <h4>Contacto:</h4>
           <p><strong>Domicilio:</strong> {{ prov.address }}</p>
+          <p><strong>Contacto Directo:</strong> {{ prov.direct_contact }}</p>
           <p><strong>Teléfono:</strong> {{ prov.phone }}</p>
           <p><strong>Whatsapp:</strong> {{ prov.whatsapp }}</p>
           <p><strong>Email:</strong> {{ prov.email }}</p>
           <p><strong>Web:</strong> <a [href]="prov.website" target="_blank"> {{ prov.website }}</a></p>
-          <p><strong>Tienda:</strong> <a [href]="prov.store" target="_blank"> {{ prov.store }}</a></p>
+          <p><strong>Tienda Online:</strong> <a [href]="prov.store" target="_blank"> {{ prov.store }}</a></p>
 
           @for(red of prov.social; track $index){
             <p><strong>{{red.id}}:</strong> <a [href]="red.url" target="_blank"> {{ red.url }}</a></p>
@@ -80,6 +81,7 @@
           @if(mapaUrl()){
             <div class="mapa">
               <iframe 
+                style="max-height: 500px;"
                 width="100%" 
                 height="300" 
                 [src]="mapaUrl()"
@@ -89,8 +91,6 @@
               </iframe>
             </div>
           }
-          
-
         }
       </div>
   

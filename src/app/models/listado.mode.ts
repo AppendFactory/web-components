@@ -3,6 +3,7 @@ export interface Proveedor {
   title: string;
   content: string;
   link: string;
+  direct_contact: string;
   thumbnail: string | null;
   prv_image: string | null;
   gallery: string[];
