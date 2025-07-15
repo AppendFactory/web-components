@@ -15,7 +15,7 @@
         </select>
 
         <select id="childLocationSelect" (change)="onChildLocationChange($event)">
-          <option value="">Seleccionar localidad</option>
+          <option value="">Seleccionar localidad/barrio CABA</option>
           @for(child of childLocations(); track $index){
             <option [value]="child.name">{{ child.name }}</option>
           }
@@ -50,19 +50,15 @@
       </div>
 
       <div class="etiquetas">
-        <div class="tags">
-          @for(tag of tagsDisponibles(); track $index){
-            <div class="tag"
-                [class.seleccionado]="filtroTags().includes(tag)"
-                (click)="toggleTag(tag)">
-              {{ tag }}
-            </div>
-          }
-          @if(filtroTags.length >= 5){
-            <div class="limite-msg">
-              Máximo 5 etiquetas
-            </div>
-          }
+        <div class="inputs">
+          <ng-select
+            [items]="tagsDisponibles()"
+            [multiple]="true"
+            bindLabel=""
+            placeholder="Seleccioná etiquetas..."
+            [(ngModel)]="filtroTags"
+            (change)="onTagsChange($event)">
+          </ng-select>
         </div>
         <div class="buttons">
           <button (click)="limpiarFiltros()">Limpiar</button>

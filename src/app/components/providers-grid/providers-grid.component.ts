@@ -15,6 +15,7 @@ import { FormsModule } from "@angular/forms";
 import { ProviderService } from "../../services/provider.service";
 import { NgClass } from "@angular/common";
 import { LoadingSpinnerComponent } from "../loading-spinner/loading-spinner.component";
+import { NgSelectComponent } from "@ng-select/ng-select";
 
 declare const google: any;
 
@@ -25,6 +26,7 @@ declare const google: any;
     FormsModule,
     NgClass,
     LoadingSpinnerComponent,
+    NgSelectComponent,
   ],
   templateUrl: "./providers-grid.component.html",
   styleUrl: "./providers-grid.component.scss",
@@ -61,7 +63,7 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
   });
 
   tabToCategory = {
-    viveros: "Viveros atención público",
+    viveros: "Viveros",
     cultivos: "Cultivos",
     proveedores: "Proveedores",
   };
@@ -99,7 +101,7 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
   loadPage(page: number) {
     this.isLoading.set(true);
 
-    const tabCategoria = this.tabToCategory[this.tabActiva()] || '';
+    const tabCategoria = this.tabToCategory[this.tabActiva()] || "";
 
     this.service
       .getListados(
@@ -127,8 +129,16 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
 
   tagsDisponibles = computed(() => {
     const allTags = this.listados().flatMap((item) => item.tags);
-    return Array.from(new Set(allTags));
+    return Array.from(new Set(allTags)).sort((a, b) => a.localeCompare(b));
   });
+
+  onTagsChange(selectedTags: string[]) {
+    if (selectedTags.length > 5) {
+      selectedTags.splice(5);
+    }
+    this.filtroTags.set(selectedTags);
+    this.aplicarFiltros();
+  }
 
   cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
     this.tabActiva.set(tab);
@@ -139,18 +149,6 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
     });
     this.cleanFilters();
     this.loadPage(1);
-  }
-
-  toggleTag(tag: string) {
-    const currentTags = this.filtroTags();
-
-    const updatedTags = currentTags.includes(tag)
-      ? currentTags.filter((t) => t !== tag)
-      : currentTags.length < 5
-      ? [...currentTags, tag]
-      : currentTags;
-
-    this.filtroTags.set(updatedTags);
   }
 
   aplicarFiltros() {

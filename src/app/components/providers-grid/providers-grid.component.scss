@@ -23,7 +23,7 @@
   justify-content: space-around;
 
   .tab {
-    padding: 10px 20px;
+    padding: 12px 50px;
     border: 1px solid #ccc;
     border-radius: 25px;
     background: #f8f8f8;
@@ -60,9 +60,9 @@
 .filtros {
   margin-bottom: 20px;
 
+
   .inputs {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     gap: 12px;
     padding: 10px 0;
@@ -75,6 +75,65 @@
       min-width: 200px;
       width: 300px;
       flex: 1;
+    }
+
+    ::ng-deep .ng-select .ng-select-container {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: #FFFFFF;
+      font-size: 0.9rem;
+      min-width: 300px;
+
+      &:hover {
+        border-color: #bbb;
+        background: #f1f1f1;
+      }
+    }
+
+    ::ng-deep .ng-select.ng-select-opened .ng-select-container {
+      background: #f1f1f1;
+    }
+
+    ::ng-deep .ng-dropdown-panel {
+      border: 1px solid #000;
+    }
+
+    ::ng-deep .ng-select .ng-option {
+      padding: 5px 10px;
+      font-size: 0.85rem;
+      background-color: #ffffff;
+
+      &:hover {
+        background: #5682e8;
+        color: white;
+      }
+    }
+
+    ::ng-deep .ng-select .ng-value {
+      background: #ded2f3;
+      color: #333;
+      border-radius: 16px;
+      margin-left: 5px;
+      padding: 3px 10px;
+      font-size: 0.9rem;
+
+      &:hover {
+        background: #5c4d7d;
+        color: white;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .inputs {
+      flex-direction: column;
+
+      input[type="text"],
+      select,
+      ::ng-deep .ng-select {
+        width: 100%;
+        min-width: 100%;
+      }
     }
   }
 

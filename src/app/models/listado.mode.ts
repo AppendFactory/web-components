@@ -7,7 +7,7 @@ export interface Proveedor {
   thumbnail: string | null;
   prv_image: string | null;
   gallery: string[];
-  type: 'Normal' | 'Destacado';
+  type: "Normal" | "Destacado";
   category: string | null;
   tags: string[];
   description_short: string;
@@ -23,14 +23,16 @@ export interface Proveedor {
   website: string;
   store: string;
   social: { id: string; url: string }[];
-    notas: {
+  notas: {
     texto: string;
     imagenes: string[];
   }[];
-   horarios: {
+  horarios: {
     [dia: string]: {
-      desde: string;
-      hasta: string;
+      desde1: string;
+      hasta1: string;
+      desde2: string;
+      hasta2: string;
     };
   };
 }

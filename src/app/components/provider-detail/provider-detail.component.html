@@ -60,15 +60,19 @@
           <div class="horarios" style="padding-right: 100px;">
             <h4>Horarios:</h4>
             <div class="horarios-lista">
-              @for(dia of dias; track $index){
+              @for (dia of dias; track $index) {
                 <div class="fila">
                   <span class="dia">{{ dia }}</span>
                   <span class="horario">
                     {{
-                      prov?.horarios?.[dia.toLowerCase()]?.desde || prov?.horarios?.[dia.toLowerCase()]?.hasta 
-                        ? (prov?.horarios?.[dia.toLowerCase()]?.desde || '') + 
-                          (prov?.horarios?.[dia.toLowerCase()]?.hasta ? ' - ' + prov?.horarios?.[dia.toLowerCase()]?.hasta : '')
+                      prov?.horarios?.[dia.toLowerCase()]?.desde1
+                        ? prov.horarios[dia.toLowerCase()].desde1 + ' - ' + prov.horarios[dia.toLowerCase()].hasta1
                         : 'Cerrado'
+                    }}
+                    {{
+                      prov?.horarios?.[dia.toLowerCase()]?.desde2
+                        ? ' / ' + prov.horarios[dia.toLowerCase()].desde2 + ' - ' + prov.horarios[dia.toLowerCase()].hasta2
+                        : ''
                     }}
                   </span>
                 </div>
