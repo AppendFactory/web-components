@@ -22,12 +22,35 @@
   margin: 20px 0;
   justify-content: space-around;
 
-  .tab {
+  .tab1 {
     padding: 12px 50px;
-    border: 1px solid #ccc;
+    border: 1px solid #1C6EA4;
     border-radius: 25px;
     background: #f8f8f8;
-    color: #333;
+    color: #1C6EA4;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-weight: 500;
+
+    &:hover {
+      background: #e0e0e0;
+    }
+
+    &.active {
+      background: #1C6EA4;
+      color: #fff;
+      border-color: #1C6EA4;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .tab2 {
+    padding: 12px 50px;
+    border: 1px solid #5c4d7d;
+    border-radius: 25px;
+    background: #f8f8f8;
+    color: #5c4d7d;
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.25s ease;

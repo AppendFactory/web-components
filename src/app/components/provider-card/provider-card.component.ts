@@ -11,7 +11,7 @@ import { ImageSliderComponent } from "../image-slider/image-slider.component";
 })
 export class ProviderCardComponent {
   @Input() data!: Proveedor;
-  @Input() tab!: "viveros" | "cultivos" | "proveedores";
+  @Input() tab!: "viveros" | "cultivos" | "proveedores" | "florerias" | "accesorios" | "mayoristas";
 
   @Output() select = new EventEmitter<any>();
 

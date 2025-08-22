@@ -1,8 +1,40 @@
-<div class="tabs">
+<!-- <div class="tabs">
     <button class="tab" [class.active]="tabActiva() === 'viveros'" (click)="cambiarTab('viveros')">Viveros</button>
     <button class="tab" [class.active]="tabActiva() === 'cultivos'" (click)="cambiarTab('cultivos')">Cultivos</button>
     <button class="tab" [class.active]="tabActiva() === 'proveedores'" (click)="cambiarTab('proveedores')">Proveedores</button>
-  </div>
+    <button class="tab" [class.active]="tabActiva() === 'florerias'" (click)="cambiarTab('florerias')">Florerias</button>
+    <button class="tab" [class.active]="tabActiva() === 'accesorios'" (click)="cambiarTab('accesorios')">Accesorios</button>
+    <button class="tab" [class.active]="tabActiva() === 'mayoristas'" (click)="cambiarTab('mayoristas')">Mayoristas</button>
+  </div> -->
+
+  <div class="tabs tabs-principales">
+  <button 
+    class="tab1" 
+    [class.active]="grupoActivo() === 'publico'" 
+    (click)="cambiarGrupo('publico')">
+    Atención Público
+  </button>
+  <button 
+    class="tab2" 
+    [class.active]="grupoActivo() === 'profesionales'" 
+    (click)="cambiarGrupo('profesionales')">
+    Atención Profesionales
+  </button>
+</div>
+
+
+<div class="tabs">
+  @if (grupoActivo() === 'publico') {
+    <button class="tab1" [class.active]="tabActiva() === 'viveros'" (click)="cambiarTab('viveros')">Viveros</button>
+    <button class="tab1" [class.active]="tabActiva() === 'florerias'" (click)="cambiarTab('florerias')">Florerias</button>
+    <button class="tab1" [class.active]="tabActiva() === 'accesorios'" (click)="cambiarTab('accesorios')">Accesorios</button>
+  }
+  @if (grupoActivo() === 'profesionales') {
+    <button class="tab2" [class.active]="tabActiva() === 'cultivos'" (click)="cambiarTab('cultivos')">Cultivos</button>
+    <button class="tab2" [class.active]="tabActiva() === 'proveedores'" (click)="cambiarTab('proveedores')">Proveedores</button>
+    <button class="tab2" [class.active]="tabActiva() === 'mayoristas'" (click)="cambiarTab('mayoristas')">Mayoristas</button>
+  }
+</div>
 
   @if(tabActiva() === 'viveros'){
     <div class="filtros">
@@ -36,7 +68,7 @@
     </div>
   }
 
-  @if(tabActiva() === 'cultivos' || tabActiva() === 'proveedores'){
+  @if( tabActiva() !== 'viveros'){
     <div class="filtros">
       <div class="inputs">
         <input type="text" placeholder="Buscar empresa..." [(ngModel)]="filtroNombre">

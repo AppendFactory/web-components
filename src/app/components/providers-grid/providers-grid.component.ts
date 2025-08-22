@@ -37,8 +37,14 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
   private readonly service = inject(ProviderService);
 
   isLoading = signal(false);
+  grupoActivo = signal<'publico' | 'profesionales'>('publico');
+  readonly grupos = {
+    publico: ['viveros', 'florerias', 'accesorios'],
+    profesionales: ['cultivos', 'proveedores', 'mayoristas']
+  };
+
   listados = signal<Proveedor[]>([]);
-  tabActiva = signal<"viveros" | "cultivos" | "proveedores">("viveros");
+  tabActiva = signal<"viveros" | "cultivos" | "proveedores" | "florerias" | "accesorios" | "mayoristas">("viveros");
   itemsPerPage = signal(12);
   currentPage = signal(1);
   totalPages = signal(1);
@@ -64,7 +70,10 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
 
   tabToCategory = {
     viveros: "Viveros",
+    florerias: "Florerias",
+    accesorios: "Accesorios",
     cultivos: "Cultivos",
+    mayoristas: "Mayoristas",
     proveedores: "Proveedores",
   };
 
@@ -140,7 +149,13 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
     this.aplicarFiltros();
   }
 
-  cambiarTab(tab: "viveros" | "cultivos" | "proveedores") {
+  cambiarGrupo(grupo: 'publico' | 'profesionales') {
+    this.grupoActivo.set(grupo);
+    const primeraTabDelGrupo = this.grupos[grupo][0] as "viveros" | "cultivos" | "proveedores" | "florerias" | "accesorios" | "mayoristas";
+    this.cambiarTab(primeraTabDelGrupo);
+  }
+
+  cambiarTab(tab: "viveros" | "cultivos" | "proveedores" | "florerias" | "accesorios" | "mayoristas") {
     this.tabActiva.set(tab);
     this.currentPage.set(1);
 
@@ -197,7 +212,7 @@ export class ProvidersGridComponent implements OnInit, AfterViewInit {
     this.filtroTags.set([]);
     this.filtroCategoria.set("");
     this.filtroUbicacion.set("");
-    this.categorias.set([]);
+    // this.categorias.set([]);
   }
 
   limpiarFiltros() {
